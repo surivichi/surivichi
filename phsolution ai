@@ -1,0 +1,43 @@
+// Include necessary libraries
+#include <LiquidCrystal.h>
+
+// Define pH sensor pin
+const int pH_pin = A0;
+
+// Define LED display pins
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+void setup() {
+  // Initialize the LCD
+  lcd.begin(16, 2);
+}
+
+void loop() {
+  // Read pH value from sensor
+  float pH_value = analogRead(pH_pin);
+  // Convert analog reading to pH value (calibration may be needed)
+  pH_value = map(pH_value, 0, 1023, 0, 14);
+
+  // Display pH value on LCD
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("pH:");
+  lcd.print(pH_value);
+
+  // Display color based on pH value range
+  if (pH_value >= 0 && pH_value <= 4) {
+    lcd.setCursor(0, 1);
+    lcd.print("Acidic");
+    // Set LED color to red
+  } else if (pH_value >= 5 && pH_value <= 8) {
+    lcd.setCursor(0, 1);
+    lcd.print("Neutral");
+    // Set LED color to green
+  } else if (pH_value >= 9 && pH_value <= 14) {
+    lcd.setCursor(0, 1);
+    lcd.print("Alkaline");
+    // Set LED color to blue
+  }
+  
+  delay(1000); // Update every 1 second
+}
